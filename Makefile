@@ -1,8 +1,13 @@
 NAME = fractol
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
-MLXFLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
-INCLUDES = -I. -Iminilibx-linux
+
+CC = cc
+
+CFLAGS = -Wall -Wextra -Werror -I/usr/include -Imlx_linux -O3
+MLX_PATH = minilibx-linux
+LIBRARY = -L $(MLX_PATH) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+MLX = $(MLX_PATH)/libmlx.a
+LIBFT_PATH = libft
+LIBFT = $(LIBFT_PATH)/libft.a
 
 SRCS = main.c \
        utils.c \
@@ -10,26 +15,26 @@ SRCS = main.c \
        events.c
 
 OBJS = $(SRCS:.c=.o)
-LIBFT = libft/libft.a
 
-all: $(LIBFT) $(NAME)
-
-$(LIBFT):
-	make -C libft
+all: $(MLX) $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(LIBFT) $(MLXFLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -L $(LIBFT_PATH) -lft $(LIBRARY) -o $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(LIBFT):
+	@make -s -C $(LIBFT_PATH)
+
+$(MLX):
+	@make -s -C $(MLX_PATH) -j16 2> /dev/null
 
 clean:
-	make -C libft clean
-	rm -f $(OBJS)
+	@$(RM) $(OBJS)
+	@make -C $(LIBFT_PATH) clean
+	@make -C $(MLX_PATH) clean
 
 fclean: clean
-	make -C libft fclean
-	rm -f $(NAME)
+	@$(RM) $(NAME)
+	@make -C $(LIBFT_PATH) fclean
 
 re: fclean all
 

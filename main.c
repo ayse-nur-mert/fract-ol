@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv)
 {
-	t_fractol f = {0};
+	t_fractol	f;
 
 	if (parse_args(argc, argv, &f) != 0)
 	{
@@ -26,7 +26,6 @@ int	main(int argc, char **argv)
 	mlx_hook(f.win, 2, 1L << 0, handle_keypress, &f);
 	mlx_hook(f.win, 17, 0, close_window, &f);
 	mlx_mouse_hook(f.win, handle_mouse, &f);
-	mlx_loop(f.mlx);ü
-	cleanup(&f);
+	mlx_loop(f.mlx);
 	return (0);
 }
